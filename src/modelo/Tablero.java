@@ -6,13 +6,13 @@ public class Tablero {
 	private Tipo matriz[][] = new Tipo[dimension][dimension];
 	private String errorActual = "";
 
-	public Tipo getValorCasilla(int x, int y) {
-		return matriz[x][y];
-	}
-
 	public Tablero() {
 		super();
 		inicializarMatriz();
+	}
+
+	public Tipo getValorCasilla(int x, int y) {
+		return matriz[x][y];
 	}
 
 	private void inicializarMatriz() {
@@ -21,7 +21,7 @@ public class Tablero {
 				matriz[i][j] = Tipo.blanco;
 			}
 		}
-		matriz[1][1]=Tipo.O;
+		matriz[1][1] = Tipo.O;
 	}
 
 	public boolean limpiarCasilla(Coordenada coordenada) {
@@ -32,14 +32,14 @@ public class Tablero {
 		return false;
 	}
 
-	private void setPosicion(Coordenada coordenada, Tipo blanco) {
-		matriz[coordenada.getX()][coordenada.getY()] = blanco;
+	private void setPosicion(Coordenada coordenada, Tipo tipo) {
+		matriz[coordenada.getX()][coordenada.getY()] = tipo;
 
 	}
 
 	public void borrarCasilla(Coordenada coordenada, Tipo tipo) {
 		// primero hay que borrar una casilla no bloqueada de tu turno
-			limpiarCasilla(coordenada);
+		limpiarCasilla(coordenada);
 	}
 
 	public boolean colocarFicha(Coordenada coordenada, Tipo tipoActual) {
@@ -82,7 +82,7 @@ public class Tablero {
 		return getPosicion(coordenada) == tipo;
 	}
 
-	public boolean comprobarFila(Tipo[] vector) {
+	private boolean comprobarFila(Tipo[] vector) {
 		boolean encontrado = true;
 		for (int j = 0; j < vector.length - 1; j++) {
 			if (vector[j] != Tipo.blanco && vector[j] == vector[j + 1]) {
@@ -94,7 +94,7 @@ public class Tablero {
 		return encontrado;
 	}
 
-	public boolean comprobarHorizontal() {
+	private boolean comprobarHorizontal() {
 		boolean resultado = false;
 		for (int i = 0; i < matriz.length && !resultado; i++) {
 			resultado = comprobarFila(matriz[i]);
@@ -102,7 +102,7 @@ public class Tablero {
 		return resultado;
 	}
 
-	public boolean comprobarVertical() {
+	private boolean comprobarVertical() {
 		boolean respuesta = false;
 		for (int columna = 0; columna < matriz.length && !respuesta; columna++) {
 			boolean valido = true;
@@ -145,5 +145,4 @@ public class Tablero {
 		return comprobarVertical() || comprobarHorizontal() || comprobarDiagonal();
 	}
 
-	
 }

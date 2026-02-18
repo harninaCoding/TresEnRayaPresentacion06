@@ -84,12 +84,12 @@ public class TresEnRaya {
 		}
 	}
 
-	private boolean colocarFicha(Coordenada coordenada, Coordenada antigua) {
-		if (coordenada.isContigua(antigua)) {
-			return colocarFicha(coordenada);
-		}
-		return false;
-	}
+//	private boolean colocarFicha(Coordenada coordenada, Coordenada antigua) {
+//		if (coordenada.isContigua(antigua)) {
+//			return colocarFicha(coordenada);
+//		}
+//		return false;
+//	}
 
 	private boolean colocarFicha(Coordenada coordenada) {
 		boolean colocada = this.tablero.colocarFicha(coordenada, this.juego.getTurnoActual());
@@ -108,9 +108,9 @@ public class TresEnRaya {
 		return this.juego.getTurnoActual();
 	}
 
-	public String getTipoAnteriorName() {
-		return this.juego.getTurnoAnteriorName();
-	}
+//	public String getTipoAnteriorName() {
+//		return this.juego.getTurnoAnteriorName();
+//	}
 
 	public boolean comprobarTresEnRaya() {
 		return tablero.isTresEnRaya();

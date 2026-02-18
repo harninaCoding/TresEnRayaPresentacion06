@@ -11,8 +11,6 @@ import modelo.Coordenada;
 
 class TresNRayaTest {
 	
-	
-	
 	@Test
 	void testRealizarJugadaMover() {
 		int jugada=1;
