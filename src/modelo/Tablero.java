@@ -42,14 +42,8 @@ public class Tablero {
 		limpiarCasilla(coordenada);
 	}
 
-	public boolean colocarFicha(Coordenada coordenada, Tipo tipoActual) {
-
-		if (matriz[coordenada.getX()][coordenada.getY()] == Tipo.blanco) {
-			matriz[coordenada.getX()][coordenada.getY()] = tipoActual;
-//			System.out.println("coordenada puesta");
-			return true;
-		}
-		return false;
+	public void colocarFicha(Coordenada coordenada, Tipo tipoActual) {
+		matriz[coordenada.getX()][coordenada.getY()] = tipoActual;
 	}
 
 	public Tipo getPosicion(Coordenada coordenada) {
@@ -107,7 +101,6 @@ public class Tablero {
 		for (int columna = 0; columna < matriz.length && !respuesta; columna++) {
 			boolean valido = true;
 			for (int fila = 0; fila < matriz.length - 1 && valido; fila++) {
-
 				if (matriz[fila][columna] == Tipo.blanco || matriz[fila][columna] != matriz[fila + 1][columna]) {
 					valido = false;
 				}

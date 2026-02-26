@@ -1,9 +1,9 @@
 package modelo;
 
 public class RespuestaColocacion {
-	private boolean respuesta;
+	private boolean respuesta=false;
 	private String mensaje="";
-	private Tipo tipo;
+	private Tipo tipo=Tipo.blanco;
 	private boolean finJuego=false;
 	
 	public RespuestaColocacion(boolean respuesta, String mensaje, Tipo tipo, boolean finJuego) {
@@ -14,6 +14,16 @@ public class RespuestaColocacion {
 		this.finJuego = finJuego;
 	}
 	
+	public RespuestaColocacion(String mensaje) {
+		super();
+		this.mensaje = mensaje;
+	}
+
+	public RespuestaColocacion(boolean respuesta,Tipo tipo) {
+		super();
+		this.respuesta = respuesta;
+		this.tipo = tipo;
+	}
 
 	public RespuestaColocacion() {
 		super();

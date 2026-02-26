@@ -13,7 +13,7 @@ class TresNRayaTest {
 	
 	@Test
 	void testRealizarJugadaMover() {
-		int jugada=1;
+		int jugada=0;
 		//1
 		/*
 		 * 0 0 0
@@ -21,10 +21,15 @@ class TresNRayaTest {
 		 * 0 0 0
 		 */
 		TresEnRaya tresNRaya=new TresEnRaya();
-		//la X
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(0, 0)));
+//		La jugada 0
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(1, 1)).isRespuesta());
 		jugada++;
 		int actual=tresNRaya.getNumerojugada();
+		assertEquals(actual, jugada);
+		//la X
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(0, 0)).isRespuesta());
+		jugada++;
+		actual=tresNRaya.getNumerojugada();
 		assertEquals(actual, jugada);
 		//2
 		/*
@@ -34,7 +39,7 @@ class TresNRayaTest {
 		 */
 		assertFalse(tresNRaya.comprobarTresEnRaya());
 		//la O
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(0, 1)));		
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(0, 1)).isRespuesta());		
 		jugada = checkTurno(jugada, tresNRaya);
 		//3
 		/*
@@ -44,7 +49,7 @@ class TresNRayaTest {
 		 */
 		assertFalse(tresNRaya.comprobarTresEnRaya());
 		//repetir no esta libre
-		assertFalse(tresNRaya.realizarJugada(new Coordenada(0, 1)));		
+		assertFalse(tresNRaya.realizarJugada(new Coordenada(0, 1)).isRespuesta());		
 		//3
 		/*
 		 * X O 0
@@ -53,7 +58,7 @@ class TresNRayaTest {
 		 */
 		assertFalse(tresNRaya.comprobarTresEnRaya());
 		
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(1, 0)));
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(1, 0)).isRespuesta());
 		jugada = checkTurno(jugada, tresNRaya);
 		//4
 		/*
@@ -63,7 +68,7 @@ class TresNRayaTest {
 		 */
 		assertFalse(tresNRaya.comprobarTresEnRaya());
 		
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(2, 0)));
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(2, 0)).isRespuesta());
 		jugada = checkTurno(jugada, tresNRaya);
 		//5
 		/*
@@ -75,7 +80,7 @@ class TresNRayaTest {
 		
 		//la sexta jugada
 		///////////////////////////////////////////////////
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(2, 1)));
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(2, 1)).isRespuesta());
 		jugada++;
 		actual=tresNRaya.getNumerojugada();
 		assertEquals(actual, jugada);
@@ -90,9 +95,9 @@ class TresNRayaTest {
 		//jugada 7
 		assertTrue("O".equals(tresNRaya.getTipoActualName()));
 		//casilla de la X, no es tuya
-		assertFalse(tresNRaya.realizarJugada(new Coordenada(2, 1)));
+		assertFalse(tresNRaya.realizarJugada(new Coordenada(2, 1)).isRespuesta());
 		//la casilla esta en blanco
-		assertFalse(tresNRaya.realizarJugada(new Coordenada(1, 2)));
+		assertFalse(tresNRaya.realizarJugada(new Coordenada(1, 2)).isRespuesta());
 		assertFalse(tresNRaya.comprobarTresEnRaya());
 		int posterior=tresNRaya.getNumerojugada();
 		assertEquals(actual, posterior);
@@ -100,8 +105,8 @@ class TresNRayaTest {
 		assertEquals(actual, jugada);
 		//ha fallado este caso porque no di valores correctos
 		//sigo con la X
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(0, 1)));
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(0, 2)));
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(0, 1)).isRespuesta());
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(0, 2)).isRespuesta());
 		jugada = checkTurno(jugada, tresNRaya);
 		assertTrue(tresNRaya.comprobarTresEnRaya());
 		/*
@@ -114,9 +119,9 @@ class TresNRayaTest {
 		//hacer jugada invalida de movimiento
 		actual=tresNRaya.getNumerojugada();
 		assertEquals(actual, jugada);
-		assertFalse(tresNRaya.realizarJugada(new Coordenada(1, 1)));
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(2, 1)));
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(2, 2)));
+		assertFalse(tresNRaya.realizarJugada(new Coordenada(1, 1)).isRespuesta());
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(2, 1)).isRespuesta());
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(2, 2)).isRespuesta());
 		assertTrue(tresNRaya.comprobarTresEnRaya());
 		posterior=tresNRaya.getNumerojugada();
 		assertEquals(actual+1, posterior);
@@ -130,8 +135,8 @@ class TresNRayaTest {
 		String turno = tresNRaya.getTipoActualName();
 		actual=tresNRaya.getNumerojugada();
 		//le toca a la O
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(1, 1)));
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(0, 1)));
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(1, 1)).isRespuesta());
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(0, 1)).isRespuesta());
 		assertFalse(tresNRaya.comprobarTresEnRaya());
 		posterior=tresNRaya.getNumerojugada();
 		assertEquals(actual+1, posterior);
@@ -146,9 +151,9 @@ class TresNRayaTest {
 		assertTrue("X".equals(turno));
 		actual=tresNRaya.getNumerojugada();
 		//deben ser pares si le toca al 2
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(2, 2)));
-		assertFalse(tresNRaya.realizarJugada(new Coordenada(0, 2)));
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(2, 1)));
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(2, 2)).isRespuesta());
+		assertFalse(tresNRaya.realizarJugada(new Coordenada(0, 2)).isRespuesta());
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(2, 1)).isRespuesta());
 		assertFalse(tresNRaya.comprobarTresEnRaya());
 		posterior=tresNRaya.getNumerojugada();
 		assertEquals(actual+1, posterior);
@@ -162,8 +167,8 @@ class TresNRayaTest {
 		assertTrue("O".equals(turno));
 		actual=tresNRaya.getNumerojugada();
 		//deben ser pares si le toca al 2
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(0, 2)));
-		assertTrue(tresNRaya.realizarJugada(new Coordenada(1, 1)));
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(0, 2)).isRespuesta());
+		assertTrue(tresNRaya.realizarJugada(new Coordenada(1, 1)).isRespuesta());
 		assertFalse(tresNRaya.comprobarTresEnRaya());
 		posterior=tresNRaya.getNumerojugada();
 		assertEquals(actual+1, posterior);

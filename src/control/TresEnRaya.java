@@ -20,22 +20,21 @@ public class TresEnRaya {
 		juego = new Juego();
 	}
 
+	private RespuestaColocacion colocarFicha(Coordenada coordenada) {
+		this.tablero.colocarFicha(coordenada, this.juego.getTurnoActual());
+		this.juego.incrementaJugada();
+		return new RespuestaColocacion(true, tablero.getPosicion(coordenada));
+	}
+
 	private RespuestaColocacion colocarFichaInicial() {
-		RespuestaColocacion respuestaColocacion=new RespuestaColocacion();
+		RespuestaColocacion respuesta;
 		if (tablero.isLibre(origen)) {
-			colocarFicha(origen);
-			// Importante: mantenemos mover = true para que al llegar a la jugada 7
-			// el sistema sepa que debe empezar pidiendo el origen.
+			respuesta = colocarFicha(origen);
 			this.mover = true;
-			respuestaColocacion.setRespuesta(true);
-			respuestaColocacion.setTipo(getTipoActual());
-			respuestaColocacion.setFinJuego(isTresNRaya());
+			respuesta.setFinJuego(isTresNRaya());
+			return respuesta;
 		}
-		respuestaColocacion.setRespuesta(false);
-		respuestaColocacion.setMensaje("no esta libre");
-		respuestaColocacion.setTipo(getTipoActual());
-		respuestaColocacion.setFinJuego(isTresNRaya());
-		return respuestaColocacion;
+		return new RespuestaColocacion("Casilla no libre");
 	}
 
 	/**
@@ -48,17 +47,20 @@ public class TresEnRaya {
 	 * @return
 	 */
 	private RespuestaColocacion moverFicha(Coordenada origen, Coordenada destino) {
-		RespuestaColocacion respuesta=new RespuestaColocacion();
+		RespuestaColocacion respuesta = new RespuestaColocacion();
+		if (!tablero.isLibre(destino))
+			respuesta.setMensaje("casilla ocupada");
+		else if (!origen.isContigua(destino))
+			respuesta.setMensaje("casilla no contigua");
 		if (tablero.isLibre(destino) && origen.isContigua(destino)) {
 			tablero.colocarFicha(origen, Tipo.blanco); // Borra origen
 			tablero.colocarFicha(destino, getTipoActual()); // Pone en destino
 			respuesta.setRespuesta(true);
+			respuesta.setTipo(tablero.getPosicion(destino));
 			respuesta.setFinJuego(isTresNRaya());
 			return respuesta;
 		}
 		respuesta.setRespuesta(false);
-		if(!tablero.isLibre(destino)) respuesta.setMensaje("casilla ocupada");
-		else if(!origen.isContigua(destino)) respuesta.setMensaje("casilla no contigua");
 		return respuesta;
 	}
 
@@ -75,52 +77,33 @@ public class TresEnRaya {
 
 		// El usuario elige qué ficha quiere mover
 		if (mover) {
+			RespuestaColocacion respuesta = new RespuestaColocacion();
 			boolean comprobarPropiedad = tablero.isPropiedad(coordenada, getTipoActual());
+			if (!comprobarPropiedad)
+				respuesta.setMensaje("la casilla no es de tu propiedad");
 			boolean comprobarBloqueada = tablero.isBloqueada(coordenada);
+			if (comprobarBloqueada)
+				respuesta.setMensaje("la casilla esta bloqueada");
 			if (comprobarPropiedad && !comprobarBloqueada) {
 				this.origen = coordenada;
 				tablero.borrarCasilla(coordenada, Tipo.blanco);
 				this.mover = false; // Cambiamos el estado: el siguiente clic será el destino
-				RespuestaColocacion respuestaColocacion = new RespuestaColocacion();
-				respuestaColocacion.setRespuesta(true);
-				respuestaColocacion.setFinJuego(isTresNRaya());
-				return respuestaColocacion;
+				respuesta.setRespuesta(true);
+				respuesta.setTipo(tablero.getPosicion(origen));
+				respuesta.setFinJuego(isTresNRaya());
 			}
-			RespuestaColocacion respuestaColocacion = new RespuestaColocacion();
-			respuestaColocacion.setRespuesta(false);
-			if(!comprobarPropiedad) respuestaColocacion.setMensaje("no es tuya");
-			else if(!comprobarBloqueada) respuestaColocacion.setMensaje("esta bloqueada");
-			respuestaColocacion.setFinJuego(isTresNRaya());
-			return respuestaColocacion;
+			return respuesta;
 		}
 		// El usuario ya eligió origen, ahora elige el destino
 		else {
 			this.destino = coordenada;
-			RespuestaColocacion respuestaColocacion=moverFicha(origen, destino);
-			boolean exito = respuestaColocacion.isRespuesta();
-			if (exito) {
+			RespuestaColocacion respuesta = moverFicha(origen, destino);
+			if (respuesta.isRespuesta()) {
 				juego.incrementaJugada();
 				this.mover = true; // Reset para el siguiente turno
 			}
-
-			return respuestaColocacion;
+			return respuesta;
 		}
-	}
-
-//	private boolean colocarFicha(Coordenada coordenada, Coordenada antigua) {
-//		if (coordenada.isContigua(antigua)) {
-//			return colocarFicha(coordenada);
-//		}
-//		return false;
-//	}
-
-	private boolean colocarFicha(Coordenada coordenada) {
-		boolean colocada = this.tablero.colocarFicha(coordenada, this.juego.getTurnoActual());
-		if (colocada) {
-			this.juego.incrementaJugada();
-			return true;
-		}
-		return false;
 	}
 
 	public String getTipoActualName() {
@@ -156,7 +139,7 @@ public class TresEnRaya {
 	}
 
 	public boolean isCasillaImpropiaError(Coordenada coordenada) {
-		return !tablero.isPropiedad(coordenada,getTipoActual());
+		return !tablero.isPropiedad(coordenada, getTipoActual());
 	}
 
 	public boolean isTresNRaya() {
