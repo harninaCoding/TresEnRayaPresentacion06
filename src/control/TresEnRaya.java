@@ -120,4 +120,24 @@ public class TresEnRaya {
 		return juego.getNumeroJugada();
 	}
 
+	public String getCasillaContenido(Coordenada coordenada) {
+		return tablero.getPosicion(coordenada).getNombre();
+	}
+
+	public boolean isCasillaOcupadaError(Coordenada coordenada) {
+		return !tablero.isLibre(coordenada);
+	}
+
+	public boolean isCasillaBloqueadaError(Coordenada coordenada) {
+		return tablero.isBloqueada(coordenada);
+	}
+
+	public boolean isCasillaImpropiaError(Coordenada coordenada) {
+		return !tablero.isPropiedad(coordenada,getTipoActual());
+	}
+
+	public boolean isTresNRaya() {
+		return tablero.isTresEnRaya();
+	}
+
 }

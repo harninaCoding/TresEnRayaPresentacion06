@@ -21,7 +21,7 @@ public class Tablero {
 				matriz[i][j] = Tipo.blanco;
 			}
 		}
-		matriz[1][1] = Tipo.O;
+//		matriz[1][1] = Tipo.O;
 	}
 
 	public boolean limpiarCasilla(Coordenada coordenada) {

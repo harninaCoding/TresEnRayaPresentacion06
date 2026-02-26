@@ -5,7 +5,7 @@ import modelo.Tipo;
 public class Juego {
 	private int cantidadJugadores = 2;
 	private int cantidadFichas = 3;
-	private int numeroJugada = 1;
+	private int numeroJugada = 0;
 	private boolean mover = false;
 
 //	public boolean isJugadaMovimiento() {
