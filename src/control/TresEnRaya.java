@@ -1,6 +1,9 @@
 package control;
 
+import javax.sql.RowSetReader;
+
 import modelo.Coordenada;
+import modelo.RespuestaColocacion;
 import modelo.Tablero;
 import modelo.Tipo;
 
@@ -17,15 +20,22 @@ public class TresEnRaya {
 		juego = new Juego();
 	}
 
-	private boolean colocarFichaInicial() {
+	private RespuestaColocacion colocarFichaInicial() {
+		RespuestaColocacion respuestaColocacion=new RespuestaColocacion();
 		if (tablero.isLibre(origen)) {
 			colocarFicha(origen);
 			// Importante: mantenemos mover = true para que al llegar a la jugada 7
 			// el sistema sepa que debe empezar pidiendo el origen.
 			this.mover = true;
-			return true;
+			respuestaColocacion.setRespuesta(true);
+			respuestaColocacion.setTipo(getTipoActual());
+			respuestaColocacion.setFinJuego(isTresNRaya());
 		}
-		return false;
+		respuestaColocacion.setRespuesta(false);
+		respuestaColocacion.setMensaje("no esta libre");
+		respuestaColocacion.setTipo(getTipoActual());
+		respuestaColocacion.setFinJuego(isTresNRaya());
+		return respuestaColocacion;
 	}
 
 	/**
@@ -37,20 +47,26 @@ public class TresEnRaya {
 	 * 
 	 * @return
 	 */
-	private boolean moverFicha(Coordenada origen, Coordenada destino) {
+	private RespuestaColocacion moverFicha(Coordenada origen, Coordenada destino) {
+		RespuestaColocacion respuesta=new RespuestaColocacion();
 		if (tablero.isLibre(destino) && origen.isContigua(destino)) {
 			tablero.colocarFicha(origen, Tipo.blanco); // Borra origen
 			tablero.colocarFicha(destino, getTipoActual()); // Pone en destino
-			return true;
+			respuesta.setRespuesta(true);
+			respuesta.setFinJuego(isTresNRaya());
+			return respuesta;
 		}
-		return false;
+		respuesta.setRespuesta(false);
+		if(!tablero.isLibre(destino)) respuesta.setMensaje("casilla ocupada");
+		else if(!origen.isContigua(destino)) respuesta.setMensaje("casilla no contigua");
+		return respuesta;
 	}
 
 	/**
 	 * Va a pedir posiciones de la ficha que queremos colocar hasta que hayamos
 	 * elegido una posicion libre
 	 */
-	public boolean realizarJugada(Coordenada coordenada) {
+	public RespuestaColocacion realizarJugada(Coordenada coordenada) {
 		// FASE 1: Colocación inicial (Jugadas 1 a 6)
 		if (juego.getNumeroJugada() < 6) {
 			this.origen = coordenada; // Usamos origen como la casilla donde se coloca
@@ -65,22 +81,29 @@ public class TresEnRaya {
 				this.origen = coordenada;
 				tablero.borrarCasilla(coordenada, Tipo.blanco);
 				this.mover = false; // Cambiamos el estado: el siguiente clic será el destino
-				return true;
+				RespuestaColocacion respuestaColocacion = new RespuestaColocacion();
+				respuestaColocacion.setRespuesta(true);
+				respuestaColocacion.setFinJuego(isTresNRaya());
+				return respuestaColocacion;
 			}
-			return false;
+			RespuestaColocacion respuestaColocacion = new RespuestaColocacion();
+			respuestaColocacion.setRespuesta(false);
+			if(!comprobarPropiedad) respuestaColocacion.setMensaje("no es tuya");
+			else if(!comprobarBloqueada) respuestaColocacion.setMensaje("esta bloqueada");
+			respuestaColocacion.setFinJuego(isTresNRaya());
+			return respuestaColocacion;
 		}
-
 		// El usuario ya eligió origen, ahora elige el destino
 		else {
 			this.destino = coordenada;
-			boolean exito = moverFicha(origen, destino);
+			RespuestaColocacion respuestaColocacion=moverFicha(origen, destino);
+			boolean exito = respuestaColocacion.isRespuesta();
 			if (exito) {
 				juego.incrementaJugada();
 				this.mover = true; // Reset para el siguiente turno
-				return true;
 			}
 
-			return false;
+			return respuestaColocacion;
 		}
 	}
 

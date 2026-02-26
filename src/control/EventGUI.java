@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import modelo.Coordenada;
+import modelo.RespuestaColocacion;
 import vista.AccesoGUI;
 import vista.MyButton;
 
@@ -42,27 +43,16 @@ public class EventGUI {
 				// me entrega el objeto que ha disparado el evento (entre otras cosas)
 				MyButton boton = (MyButton) e.getSource();
 				Coordenada coordenada = boton.getCoordenada();
-				if (tresNRaya.realizarJugada(coordenada)) {
-					boton.setText(tresNRaya.getCasillaContenido(coordenada));
-					accesoGUI.getLblMensaje().setText("");
-					// fin de juego
-					if(tresNRaya.isTresNRaya()) {
-						accesoGUI.getLblMensaje().setText("Tres en raya!!!");
-						pararJuego();
-					}
-				}
-				// Algo ha fallado
-				// ask instead tell
-				else {
-					// casilla ocupada
-					if (tresNRaya.isCasillaOcupadaError(coordenada))
-						accesoGUI.getLblMensaje().setText("casilla ocupada");
-					// casilla bloqueada
-					if (tresNRaya.isCasillaBloqueadaError(coordenada))
-						accesoGUI.getLblMensaje().setText("casilla bloqueada");
-					// no es una casilla de tu propiedad
-					if (tresNRaya.isCasillaImpropiaError(coordenada))
-						accesoGUI.getLblMensaje().setText("casilla no es tuya, no se puede mover");
+				RespuestaColocacion respuestaJugada = tresNRaya.realizarJugada(coordenada);
+				//Tell dont ask
+				if(respuestaJugada.isRespuesta())
+					boton.setText(respuestaJugada.getTipo().getNombre());
+				else
+					// De esta forma como el tresNRAya me dice lo que ha pasado
+					//no tengo que preguntarselo aqui
+					accesoGUI.getLblMensaje().setText(respuestaJugada.getMensaje());
+				if (respuestaJugada.isFinJuego()) {
+					pararJuego();
 				}
 			}
 
