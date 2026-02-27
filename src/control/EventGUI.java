@@ -21,6 +21,11 @@ public class EventGUI {
 	private ActionListener actionListener;
 
 	// se inyecta el objeto que implemente el accesoGUI, en nuestro caso el GUI
+	// Si necesitas usar un objeto, debe existir, si no tienes nullpointerException
+	// cuando lo uses. Dentro de Eventgui NO se crea ningun objeto AccesoGUI.
+	// es decir, no hay un new AccesoGUI().
+	// Entonces, desde fuera, la clase que cree el objeto eventGUI debe crear un
+//	objeto AccesoGUI y pasarselo al EventGUI cuando lo construya
 	public EventGUI(AccesoGUI accesoGUI) {
 		super();
 		this.accesoGUI = accesoGUI;
@@ -44,12 +49,12 @@ public class EventGUI {
 				MyButton boton = (MyButton) e.getSource();
 				Coordenada coordenada = boton.getCoordenada();
 				RespuestaColocacion respuestaJugada = tresNRaya.realizarJugada(coordenada);
-				//Tell dont ask
-				if(respuestaJugada.isRespuesta())
+				// Tell dont ask
+				if (respuestaJugada.isRespuesta())
 					boton.setText(respuestaJugada.getTipo().getNombre());
 				else
 					// De esta forma como el tresNRAya me dice lo que ha pasado
-					//no tengo que preguntarselo aqui
+					// no tengo que preguntarselo aqui
 					accesoGUI.getLblMensaje().setText(respuestaJugada.getMensaje());
 				if (respuestaJugada.isFinJuego()) {
 					pararJuego();
@@ -61,7 +66,7 @@ public class EventGUI {
 				for (int i = 0; i < buttonMatrix.length; i++) {
 					buttonMatrix[i].setEnabled(false);
 				}
-				
+
 			}
 		};
 	}

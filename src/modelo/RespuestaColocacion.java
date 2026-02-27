@@ -17,12 +17,14 @@ public class RespuestaColocacion {
 	public RespuestaColocacion(String mensaje) {
 		super();
 		this.mensaje = mensaje;
+		this.respuesta=false;
 	}
 
-	public RespuestaColocacion(boolean respuesta,Tipo tipo) {
+	public RespuestaColocacion(Tipo tipo,boolean isFinJuego) {
 		super();
-		this.respuesta = respuesta;
+		this.respuesta = true;
 		this.tipo = tipo;
+		this.finJuego=isFinJuego;
 	}
 
 	public RespuestaColocacion() {
