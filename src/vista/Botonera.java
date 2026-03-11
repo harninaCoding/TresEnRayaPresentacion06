@@ -15,7 +15,7 @@ public class Botonera extends JPanel {
 		super();
 		botonera = new JPanel();
 		botonera.setBounds(122, 58, 228, 181);
-		botonera.setLayout(new GridLayout(3, 3, 0, 0));
+		botonera.setLayout(new GridLayout(dimension, dimension, 0, 0));
 		contentPane.add(botonera);
 
 		for (int i = 0; i < dimension; i++) {
